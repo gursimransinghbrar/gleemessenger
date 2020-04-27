@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "722130327262",
+    "firebase_url": "https://gleemessenger.firebaseio.com",
+    "project_id": "gleemessenger",
+    "storage_bucket": "gleemessenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722130327262:android:2fac33793ba99910c5544f",
+        "android_client_info": {
+          "package_name": "com.example.gleemessenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "722130327262-ri8vn4ki192fdq1igcr5qvj1t5p86k1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gleemessenger",
+            "certificate_hash": "2ae1c0407a4f47708befb053de5521c55f8d4afc"
+          }
+        },
+        {
+          "client_id": "722130327262-30bstpcm5deafapsvilunq2p4u1mnq85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD83_cBWp0LTmO8EGU0zHqG__O93UoptF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "722130327262-30bstpcm5deafapsvilunq2p4u1mnq85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

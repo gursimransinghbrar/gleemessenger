@@ -2,17 +2,20 @@ package com.example.gleemessenger;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,6 +50,7 @@ public class SettingsActivity extends AppCompatActivity
     private StorageReference UserProfileImagesRef;
     private ProgressDialog loadingBar;
 
+    private Toolbar SettingsToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,7 @@ public class SettingsActivity extends AppCompatActivity
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void InitializeFields()
     {
         UpdateAccountSettings = (Button) findViewById(R.id.update_settings_button);
@@ -92,6 +97,11 @@ public class SettingsActivity extends AppCompatActivity
         userStatus = (EditText) findViewById(R.id.set_profile_status);
         userProfileImage = (CircleImageView) findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
+
+
+    }
+
+    private void setSupportActionBar(Toolbar settingsToolBar) {
     }
 
     @Override

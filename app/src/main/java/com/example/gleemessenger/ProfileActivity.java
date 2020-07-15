@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
     private TextView userProfileName, userProfileStatus;
     private Button SendMessageRequestButton, DeclineMessageRequestButton;
 
-    private DatabaseReference UserRef, ChatRequestRef, ContactsRef;
+    private DatabaseReference UserRef, ChatRequestRef, ContactsRef, NotificationRef;
     private FirebaseAuth mAuth;
 
     @Override
@@ -44,6 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
         UserRef = FirebaseDatabase.getInstance().getReference().child("Users");
         ChatRequestRef = FirebaseDatabase.getInstance().getReference().child("Chat Requests");
         ContactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
+        NotificationRef = FirebaseDatabase.getInstance().getReference().child("Notifications");
 
         receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
         senderUserID = mAuth.getCurrentUser().getUid();
@@ -334,9 +335,23 @@ import de.hdodenhof.circleimageview.CircleImageView;
                                                             {
                                                                 if (task.isSuccessful())
                                                                 {
-                                                                    SendMessageRequestButton.setEnabled(true);
-                                                                    Currrent_State = "request_sent";
-                                                                    SendMessageRequestButton.setText("Cancel Chat Request");
+                                                                    HashMap<String, String> chatNotificationMap = new HashMap<>();
+                                                                    chatNotificationMap.put("from", senderUserID);
+                                                                    chatNotificationMap.put("type", "request");
+
+                                                                    NotificationRef.child(receiverUserID).push()
+                                                                            .setValue(chatNotificationMap)
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task)
+                                                                                {
+                                                                                    SendMessageRequestButton.setEnabled(true);
+                                                                                    Currrent_State = "request_sent";
+                                                                                    SendMessageRequestButton.setText("Cancel Chat Request");
+                                                                                }
+                                                                            });
+
+
                                                                 }
                                                             }
 

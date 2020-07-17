@@ -87,8 +87,7 @@ public class ChatsFragment extends Fragment
                             {
                                 if (dataSnapshot.exists())
                                 {
-                                    if (dataSnapshot.hasChild("image"))
-                                    {
+                                    if (dataSnapshot.hasChild("image")) {
                                         retImage[0] = dataSnapshot.child("image").getValue().toString();
                                         Picasso.get().load(retImage[0]).into(holder.profileImage);
                                     }
@@ -97,7 +96,7 @@ public class ChatsFragment extends Fragment
                                     final String retStatus = dataSnapshot.child("status").getValue().toString();
 
                                     holder.userName.setText(retName);
-                                    holder.userStatus.setText("Last Seen: " + "Date" + "Time");
+                                    holder.userStatus.setText("Last Seen: " +"\n" + "Date" + "Time");
 
 
                                     if (dataSnapshot.child("userState").hasChild("state"))
@@ -112,7 +111,7 @@ public class ChatsFragment extends Fragment
                                         }
                                         else if (state.equals("offline"))
                                         {
-                                            holder.userStatus.setText("Last Seen: " + date + " " + time);
+                                            holder.userStatus.setText("Last Seen: " +"\n" + date + " " + time);
                                         }
                                     }
                                     else

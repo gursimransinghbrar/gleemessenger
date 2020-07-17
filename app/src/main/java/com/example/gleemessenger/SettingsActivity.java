@@ -52,6 +52,7 @@ public class SettingsActivity extends AppCompatActivity
 
     private Toolbar SettingsToolBar;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

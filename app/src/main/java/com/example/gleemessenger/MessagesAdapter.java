@@ -123,7 +123,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
             }
         }
-        else if (fromMessageType.equals("image")){
+        else if (fromMessageType.equals("image"))
+        {
             if(fromUserID.equals(messageSenderId))
             {
                 holder.messageSenderPicture.setVisibility(View.VISIBLE);

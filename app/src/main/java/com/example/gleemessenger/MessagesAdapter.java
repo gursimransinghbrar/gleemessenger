@@ -1,6 +1,8 @@
 package com.example.gleemessenger;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +68,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MessageViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull final MessageViewHolder holder, final int position)
     {
         String messageSenderId = mAuth.getCurrentUser().getUid();
         Messages messages = userMessagesList.get(position);
@@ -137,6 +139,40 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                     holder.receiverProfileImage.setVisibility(View.VISIBLE);
                     holder.messageReceiverPicture.setVisibility(View.VISIBLE);
                     Picasso.get().load(messages.getMessage()).into(holder.messageSenderPicture);
+            }
+        }
+        else{
+            if(fromUserID.equals(messageSenderId))
+            {
+                holder.messageSenderPicture.setVisibility(View.VISIBLE);
+
+                holder.messageSenderPicture.setBackgroundResource((R.drawable.file));
+
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                        holder.itemView.getContext().startActivity(intent);
+                    }
+                });
+            }
+            else {
+                holder.receiverProfileImage.setVisibility(View.VISIBLE);
+                holder.messageReceiverPicture.setVisibility(View.VISIBLE);
+
+                holder.messageReceiverPicture.setBackgroundResource((R.drawable.file));
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                        holder.itemView.getContext().startActivity(intent);
+                    }
+                });
+
+
+
             }
         }
     }

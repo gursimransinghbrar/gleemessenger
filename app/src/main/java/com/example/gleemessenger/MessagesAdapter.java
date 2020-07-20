@@ -138,7 +138,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                 {
                     holder.receiverProfileImage.setVisibility(View.VISIBLE);
                     holder.messageReceiverPicture.setVisibility(View.VISIBLE);
-                    Picasso.get().load(messages.getMessage()).into(holder.messageSenderPicture);
+                    Picasso.get().load(messages.getMessage()).into(holder.messageReceiverPicture);
             }
         }
         else{

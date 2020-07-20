@@ -95,7 +95,8 @@ public class ChatActivity extends AppCompatActivity {
 
         SendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v)
+            {
                 SendMessage();
             }
         });
@@ -104,43 +105,42 @@ public class ChatActivity extends AppCompatActivity {
 
         SendFilesButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 CharSequence options[] = new CharSequence[]
                         {
                                 "Images",
-                                "PDF Files",
-                                "MS Word Files"
+                                "PDF File",
+                                "MS Word File"
                         };
-                AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
-                builder.setTitle("Select The File");
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                builder.setTitle("Select File");
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                    if(i==0)
+                    public void onClick(DialogInterface dialogInterface, int i)
                     {
-                        checker = "image";
-
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        intent.setType("image/*");
-                        startActivityForResult(intent.createChooser(intent,"Select Image"), 438);
-                    }
-                    if(i==1)
+                        if (i == 0)
                         {
-                         checker = "pdf";
+                            checker = "image";
 
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_GET_CONTENT);
+                            intent.setType("image/*");
+                            startActivityForResult(intent.createChooser(intent, "Select Image"), 438);
+                        }
+                        if (i == 1)
+                        {
+                            checker = "pdf";
 
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_GET_CONTENT);
                             intent.setType("application/pdf");
                             startActivityForResult(intent.createChooser(intent,"Select PDF file"), 438);
-
                         }
-                    if(i==2)
+                        if (i == 2)
                         {
                             checker = "docx";
-
 
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -152,6 +152,44 @@ public class ChatActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+
+        RootRef.child("Messages").child(messageSenderID).child(messageReceiverID)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    {
+                        Messages messages = dataSnapshot.getValue(Messages.class);
+                        messagesList.add(messages);
+
+                        messageAdapter.notifyDataSetChanged();
+
+                        userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                    {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot)
+                    {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s)
+                    {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+
+                    }
+                });
     }
 
     private void InitializeControllers() {
@@ -193,7 +231,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode==438 && resultCode==RESULT_OK && data!=null && data.getData()!=null)
@@ -272,11 +311,13 @@ public class ChatActivity extends AppCompatActivity {
                 final StorageReference filePath = storageReference.child(messagePushID + "."+"jpg");
 
                 uploadTask = filePath.putFile(fileUri);
+
                 uploadTask.continueWithTask(new Continuation() {
                     @Override
                     public Object then(@NonNull Task task) throws Exception
                     {
-                        if(!task.isSuccessful()){
+                        if(!task.isSuccessful())
+                        {
                             throw task.getException();
                         }
 
@@ -285,13 +326,14 @@ public class ChatActivity extends AppCompatActivity {
                 }).addOnCompleteListener(new OnCompleteListener<Uri>(){
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
-                        if(task.isSuccessful()){
+                        if(task.isSuccessful())
+                        {
                             Uri downloadUrl = task.getResult();
                             myUrl = downloadUrl.toString();
 
 //message picture body
                             Map messageTextBody = new HashMap();
-                            messageTextBody.put("message", myUrl);
+                            messageTextBody.put("message",myUrl);
                             messageTextBody.put("name", fileUri.getLastPathSegment());
                             messageTextBody.put("type", checker);
                             messageTextBody.put("from", messageSenderID);
@@ -370,45 +412,45 @@ public class ChatActivity extends AppCompatActivity {
                 });
     }
 
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-
-        RootRef.child("Messages").child(messageSenderID).child(messageReceiverID)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Messages messages = dataSnapshot.getValue(Messages.class);
-
-                    messagesList.add(messages);
-
-                    messageAdapter.notifyDataSetChanged();
-
-                    userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-    }
+//    @Override
+//    protected void onStart()
+//    {
+//        super.onStart();
+//
+//        RootRef.child("Messages").child(messageSenderID).child(messageReceiverID)
+//                .addChildEventListener(new ChildEventListener() {
+//                    @Override
+//                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                    Messages messages = dataSnapshot.getValue(Messages.class);
+//
+//                    messagesList.add(messages);
+//
+//                    messageAdapter.notifyDataSetChanged();
+//
+//                    userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
+//                    }
+//
+//                    @Override
+//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
+//    }
 
     private void SendMessage() {
         String messageText = MessageInputText.getText().toString();
@@ -424,7 +466,7 @@ public class ChatActivity extends AppCompatActivity {
 
             String messagePushID = userMessageKeyRef.getKey();
 
-            Map messageTextBody = new HashMap();
+            Map<String, String> messageTextBody = new HashMap<String, String>();
             messageTextBody.put("message", messageText);
             messageTextBody.put("type", "text");
             messageTextBody.put("from", messageSenderID);
@@ -433,7 +475,7 @@ public class ChatActivity extends AppCompatActivity {
             messageTextBody.put("time", saveCurrentTime);
             messageTextBody.put("date", saveCurrentDate);
 
-            Map messageBodyDetails = new HashMap();
+            Map<String, Object> messageBodyDetails = new HashMap<String, Object>();
             messageBodyDetails.put(messageSenderRef + "/" + messagePushID, messageTextBody);
             messageBodyDetails.put( messageReceiverRef + "/" + messagePushID, messageTextBody);
 

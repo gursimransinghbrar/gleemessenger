@@ -241,7 +241,7 @@ public class RequestsFragment extends Fragment
                                                 final String requestUserStatus = dataSnapshot.child("status").getValue().toString();
 
                                                 holder.userName.setText(requestUserName);
-                                                holder.userStatus.setText("You Have Sent A Request To"+ requestUserName);
+                                                holder.userStatus.setText("You Have Sent A Request To "+ requestUserName);
 
                                                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                                                     @Override

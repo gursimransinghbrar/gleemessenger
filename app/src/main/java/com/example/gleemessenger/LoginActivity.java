@@ -70,6 +70,14 @@ public class LoginActivity extends AppCompatActivity
             }
         });
 
+        ForgetPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+            }
+        });
+
     }
 
     private void AllowUserToLogin()

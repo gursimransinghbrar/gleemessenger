@@ -395,7 +395,7 @@ public class ChatActivity extends AppCompatActivity {
                             }
                             else if (state.equals("offline"))
                             {
-                                userLastSeen.setText("Last Seen: " +"\n" + date + " " + time);
+                                userLastSeen.setText("Last seen " + date + " at " + time);
                             }
                         }
                         else

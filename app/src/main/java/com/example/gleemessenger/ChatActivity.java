@@ -23,6 +23,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +50,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -80,6 +84,15 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+        }
+
+        Python py = Python.getInstance();
+        final PyObject pyobj = py.getModule("cyberpunks");
+
+
+
         mAuth = FirebaseAuth.getInstance();
         messageSenderID = mAuth.getCurrentUser().getUid();
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -97,6 +110,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                PyObject obj = pyobj.callAttr("main",MessageInputText.getText().toString());
+                Toast.makeText(ChatActivity.this, "kam ho reha", Toast.LENGTH_SHORT).show();
                 SendMessage();
             }
         });
@@ -352,6 +367,7 @@ public class ChatActivity extends AppCompatActivity {
                                 {
                                     if (task.isSuccessful())
                                     {
+
                                         loadingBar.dismiss();
                                         Toast.makeText(ChatActivity.this, "Message Sent Successfully...", Toast.LENGTH_SHORT).show();
                                     }

@@ -112,7 +112,7 @@ public class ChatActivity extends AppCompatActivity {
             {
                 PyObject obj = pyobj.callAttr("main",MessageInputText.getText().toString());
                 Toast.makeText(ChatActivity.this, "kam ho reha", Toast.LENGTH_SHORT).show();
-                SendMessage();
+//                SendMessage();
             }
         });
 

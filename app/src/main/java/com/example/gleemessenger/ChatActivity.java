@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -23,6 +25,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
@@ -43,6 +51,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,15 +95,15 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
-
-        Python py = Python.getInstance();
-        final PyObject pyobj = py.getModule("cyberpunks");
-
-
-
+//        if (! Python.isStarted()) {
+//            Python.start(new AndroidPlatform(this));
+//        }
+//
+//        Python py = Python.getInstance();
+//        final PyObject pyobj = py.getModule("cyberpunks");
+        final AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        final RequestQueue queue = Volley.newRequestQueue(this);
+        final String URL="http://192.168.1.6:5000/";
         mAuth = FirebaseAuth.getInstance();
         messageSenderID = mAuth.getCurrentUser().getUid();
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -110,9 +121,69 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                PyObject obj = pyobj.callAttr("main",MessageInputText.getText().toString());
-                Toast.makeText(ChatActivity.this, "kam ho reha", Toast.LENGTH_SHORT).show();
-//                SendMessage();
+                String txt = MessageInputText.getText().toString();
+//                HashMap<String, String> mp = new HashMap<>();
+//                mp.put("test", txt);
+//                JSONObject test = new JSONObject(mp);
+                JsonObjectRequest objectRequest=new JsonObjectRequest(
+                        Request.Method.GET,
+                        URL + "?test=" + txt,
+                        null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    String response_speech = response.getString("message");
+                                    if(response_speech.equals("Hate Speech"))
+                                    {
+                                        dialog.setMessage(response.toString());
+                                    dialog.setTitle("Dialog Box");
+                                    dialog.setPositiveButton("YES",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,
+                                                                    int which) {
+                                                    Toast.makeText(getApplicationContext(),"Yes is clicked",Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                    dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Toast.makeText(getApplicationContext(),"cancel is clicked",Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                    AlertDialog alertDialog=dialog.create();
+                                    alertDialog.show();
+                                    }
+                                    else if (response_speech.equals("Good speech")){
+
+                                        SendMessage();
+
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(ChatActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+//                Toast.makeText(ChatActivity.this, objectRequest.toString(), Toast.LENGTH_SHORT).show();
+                 queue.add(objectRequest);
+
+//                PyObject obj = pyobj.callAttr("main",MessageInputText.getText().toString());
+                    ///dsadsad
+
+//                '192.168.1.6:5000'
+
+//               SendMessage();
             }
         });
 

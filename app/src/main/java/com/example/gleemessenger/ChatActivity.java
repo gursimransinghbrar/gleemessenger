@@ -136,8 +136,8 @@ public class ChatActivity extends AppCompatActivity {
                                     String response_speech = response.getString("message");
                                     if(response_speech.equals("Hate Speech"))
                                     {
-                                        dialog.setMessage(response.toString());
-                                    dialog.setTitle("Dialog Box");
+                                        dialog.setMessage("Error 555 (offensive/hate_speech): Message cannot be sent because it is defying the sending protocol. Please send something else and try again.");
+                                    dialog.setTitle("ERROR 555:Offensive/Hate_Speech");
                                     dialog.setPositiveButton("YES",
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog,
@@ -154,9 +154,9 @@ public class ChatActivity extends AppCompatActivity {
                                     AlertDialog alertDialog=dialog.create();
                                     alertDialog.show();
                                     }
-                                    else if (response_speech.equals("Good speech")){
+                                    else {
 
-                                        SendMessage();
+                                        SendMessage(response_speech);
 
                                     }
                                 } catch (JSONException e) {
@@ -539,8 +539,7 @@ public class ChatActivity extends AppCompatActivity {
 //                });
 //    }
 
-    private void SendMessage() {
-        String messageText = MessageInputText.getText().toString();
+    private void SendMessage(String messageText) {
 
         if (TextUtils.isEmpty(messageText)) {
             Toast.makeText(this, "first write your message...", Toast.LENGTH_SHORT).show();

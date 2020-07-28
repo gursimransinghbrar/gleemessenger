@@ -21,18 +21,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/group_chat_text_display"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textAllCaps="false"
-                android:textSize="20sp"
-                android:textColor="@android:color/background_dark"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
-                android:layout_marginBottom="60dp">
-            </TextView>
+                android:layout_marginBottom="60dp"
+                android:background="@drawable/receiver_messages_layout"
+                android:padding="15dp"
+                android:textAllCaps="false"
+                android:textColor="@android:color/background_dark"
+                android:textSize="20sp"></TextView>
         </LinearLayout>
     </ScrollView>
 

@@ -1,10 +1,12 @@
 package com.example.gleemessenger;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +17,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +30,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -53,7 +64,9 @@ public class GroupChatActivity extends AppCompatActivity {
         currentUserId = mAuth.getCurrentUser().getUid();
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         GroupNameRef=FirebaseDatabase.getInstance().getReference().child("Groups").child(currentGroupName);
-
+        final AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        final RequestQueue queue = Volley.newRequestQueue(this);
+        final String URL="http://192.168.1.7:5000/";
 
         InitializeFields();
 
@@ -63,7 +76,63 @@ public class GroupChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                SaveMessageInfoToDatabase();
+                String txt = userMessageInput.getText().toString();
+//                HashMap<String, String> mp = new HashMap<>();
+//                mp.put("test", txt);
+//                JSONObject test = new JSONObject(mp);
+                JsonObjectRequest objectRequest=new JsonObjectRequest(
+                        Request.Method.GET,
+                        URL + "?test=" + txt,
+                        null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    String response_speech = response.getString("message");
+                                    if(response_speech.equals("Hate Speech"))
+                                    {
+                                        dialog.setMessage("Error 555 (offensive/hate_speech): Message cannot be sent because it is defying the sending protocol. Please send something else and try again.");
+                                        dialog.setTitle("ERROR 555:Offensive/Hate_Speech");
+                                        dialog.setPositiveButton("YES",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog,
+                                                                        int which) {
+                                                        Toast.makeText(getApplicationContext(),"Yes is clicked",Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                        dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Toast.makeText(getApplicationContext(),"cancel is clicked",Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                        AlertDialog alertDialog=dialog.create();
+                                        alertDialog.show();
+                                    }
+                                    else {
+
+                                        SaveMessageInfoToDatabase(response_speech);
+
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(GroupChatActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+//                Toast.makeText(ChatActivity.this, objectRequest.toString(), Toast.LENGTH_SHORT).show();
+                queue.add(objectRequest);
+//                SaveMessageInfoToDatabase();
 
                 userMessageInput.setText("");
 
@@ -146,8 +215,7 @@ public class GroupChatActivity extends AppCompatActivity {
         });
     }
 
-    private void SaveMessageInfoToDatabase() {
-        String message = userMessageInput.getText().toString();
+    private void SaveMessageInfoToDatabase(String message) {
         String messagekEY = GroupNameRef.push().getKey();
 
         if (TextUtils.isEmpty(message))

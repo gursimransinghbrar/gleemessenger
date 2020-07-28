@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/receiver_message_text"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="3dp"
@@ -30,33 +30,32 @@
 
     <ImageView
         android:id="@+id/message_sender_image_view"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="214dp"
+        android:layout_height="235dp"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="0dp"
-        android:scaleType="centerCrop"
-         />
+        android:layout_marginEnd="17dp"
+        android:scaleType="centerCrop" />
+
 
     <ImageView
         android:id="@+id/message_receiver_image_view"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="214dp"
+        android:layout_height="241dp"
         android:layout_alignEnd="@+id/receiver_message_text"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="54dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="-1dp"
+        android:layout_marginEnd="75dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:scaleType="centerCrop" />
 
-
     <TextView
         android:id="@+id/sender_messsage_text"
-        android:layout_width="wrap_content"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="@+id/receiver_message_text"
         android:layout_alignParentEnd="true"

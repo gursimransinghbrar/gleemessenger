@@ -66,7 +66,7 @@ public class GroupChatActivity extends AppCompatActivity {
         GroupNameRef=FirebaseDatabase.getInstance().getReference().child("Groups").child(currentGroupName);
         final AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String URL="http://192.168.1.7:5000/";
+        final String URL="http://192.168.1.6:5000/";
 
         InitializeFields();
 

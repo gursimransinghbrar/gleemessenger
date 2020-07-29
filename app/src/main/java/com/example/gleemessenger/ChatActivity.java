@@ -104,7 +104,7 @@ public class ChatActivity extends AppCompatActivity {
 //        final PyObject pyobj = py.getModule("cyberpunks");
         final AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String URL="http://192.168.1.6:5000/";
+        final String URL="http://192.168.1.7:5000/";
         mAuth = FirebaseAuth.getInstance();
         messageSenderID = mAuth.getCurrentUser().getUid();
         RootRef = FirebaseDatabase.getInstance().getReference();
